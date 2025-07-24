@@ -1,0 +1,27 @@
+name: Run Tests and Upload Artifact ##Identificador del Workflow
+
+on: [push, pull_request] ##evento para ejecutar el workflow
+
+jobs: ##Lista de trabajos a ejecutar
+  test:
+    runs-on: ubuntu-latest #runner: VM cloud
+    steps: #pasos del job (procesos)
+      - name: Checkout code
+        uses: actions/checkout@v4 ##action previamente creado para instalar node.js
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install ##run: es mi propio action
+
+      - name: Run tests and generate report
+        run: node test/calculator.test.js
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: results/test-results.txt
